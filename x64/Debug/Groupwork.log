@@ -1,0 +1,4 @@
+﻿cl : 命令行  warning D9035: “Zc:forScope-”选项已否决，并将在将来的版本中移除
+  main.cpp
+C:\Users\52869\Desktop\Groupwork\Groupwork\main.cpp(228): warning C4715: “mouseclick”: 不是所有的控件路径都返回值
+  Groupwork.vcxproj -> C:\Users\52869\Desktop\Groupwork\x64\Debug\Groupwork.exe

@@ -1,0 +1,59 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "runs": [
+    {
+      "results": [],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "PREfast Code Analysis",
+          "version": "14.38.33130.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///c:/users/52869/desktop/groupwork/groupwork/main.cpp"
+          },
+          "roles": [
+            "analysisTarget"
+          ],
+          "hashes": {
+            "sha-256": "016dead08aeaa3b61fc0521d201517b1a49e8ccc390b3c8b1af8ff02d075a91e"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/program files/microsoft visual studio/2022/community/vc/auxiliary/vs/include/graphics.h"
+          },
+          "hashes": {
+            "sha-256": "057ee75a89db99556d63a972b5611a42913b3fc6678f305b01f305b076bf220c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/program files/microsoft visual studio/2022/community/vc/auxiliary/vs/include/easyx.h"
+          },
+          "hashes": {
+            "sha-256": "bb41113e55530a7bc296c223e3cb1c48b0d35c053b4c66ed843e4f75463cf0d8"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/52869/desktop/groupwork/groupwork/boardinit.h"
+          },
+          "hashes": {
+            "sha-256": "1246e0e5a78970e7af0110c5347fa13c3c4deac4ba8a908c56f853b00268bee7"
+          }
+        }
+      ]
+    }
+  ]
+}
