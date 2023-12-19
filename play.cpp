@@ -1,14 +1,14 @@
 #pragma warning (disable:4996)
-#include "play.h"//Ê²Ã´ÂÒÆß°ËÔãµÄºê¡¢Í·ÎÄ¼şÈ«ÅÜmain.hÀïÃæ¸Ä£¬MINEÔÚBoardInit.hÀïÃæ¸Ä
-//#define MINE 80//µØÀ×ÊıÁ¿ºê
-//#define num 20//Ò»²àÍ¼Æ¬¸öÊı
-//-------------------------------------------------------ÒÔÏÂÊÇÈ«¾Ö±äÁ¿
-int start = 0;//¼ì²âÓĞÃ»ÓĞµã»÷
+#include "play.h"//ä»€ä¹ˆä¹±ä¸ƒå…«ç³Ÿçš„å®ã€å¤´æ–‡ä»¶å…¨è·‘main.hé‡Œé¢æ”¹ï¼ŒMINEåœ¨BoardInit.hé‡Œé¢æ”¹
+//#define MINE 80//åœ°é›·æ•°é‡å®
+//#define num 20//ä¸€ä¾§å›¾ç‰‡ä¸ªæ•°
+//-------------------------------------------------------ä»¥ä¸‹æ˜¯å…¨å±€å˜é‡
+int start = 0;//æ£€æµ‹æœ‰æ²¡æœ‰ç‚¹å‡»
 int timerrun = 0;
 bool inopenflag = false;
 int i, j, flag;
 int cnt;
-int curt;//ÓÎÏ·Ê±¼ä
+int curt;//æ¸¸æˆæ—¶é—´
 extern int num;
 extern int MINE;
 extern int A;
@@ -18,39 +18,39 @@ extern level noob;
 extern level pro;
 extern level master;
 char buf[11][32] = { 0 };
-int map[NUM][NUM];//µØÀ×µØÍ¼È«¾ÖÊı×é
-pthread_t GameClock;//¼ÆÊ±Æ÷Ïß³Ì´´Á¢È«¾Ö±äÁ¿
-//Èç¹ûÒÔºóÓĞÊ²Ã´ÏĞÇéÑÅÖÂ¿ÉÒÔÔÙĞ´Ò»¸öÏß³ÌÈ«³Ì·Å±³¾°ÒôÀÖ³³ËÀÉóÅúÀÏÊ¦£¨bushi£©
-//ÅäÖÃpthread.hÎÄ¼şÍøÖ·£ºhttps://blog.csdn.net/weixin_54730871/article/details/131387382
-//-------------------------------------------------------ÒÔÏÂÊÇµÈ¼¶Êı¾İ½á¹¹ÌåÔ­ĞÍ
+int map[NUM][NUM];//åœ°é›·åœ°å›¾å…¨å±€æ•°ç»„
+pthread_t GameClock;//è®¡æ—¶å™¨çº¿ç¨‹åˆ›ç«‹å…¨å±€å˜é‡
+//å¦‚æœä»¥åæœ‰ä»€ä¹ˆé—²æƒ…é›…è‡´å¯ä»¥å†å†™ä¸€ä¸ªçº¿ç¨‹å…¨ç¨‹æ”¾èƒŒæ™¯éŸ³ä¹åµæ­»å®¡æ‰¹è€å¸ˆï¼ˆbushiï¼‰
+//é…ç½®pthread.hæ–‡ä»¶ç½‘å€ï¼šhttps://blog.csdn.net/weixin_54730871/article/details/131387382
+//-------------------------------------------------------ä»¥ä¸‹æ˜¯ç­‰çº§æ•°æ®ç»“æ„ä½“åŸå‹
 
-//--------------------------------------------------------ÒÔÏÂÊÇÍ¼Æ¬×ÊÔ´ÎÄ¼ş
+//--------------------------------------------------------ä»¥ä¸‹æ˜¯å›¾ç‰‡èµ„æºæ–‡ä»¶
 IMAGE gameimg[23];
 IMAGE numimg[10];
-//--------------------------------------------------------ÒÔÏÂÊÇ´úÂëÖ÷Ìå
+//--------------------------------------------------------ä»¥ä¸‹æ˜¯ä»£ç ä¸»ä½“
 void play()
 {
 	char tmp[20] = { 0 };
 	for (int s = 0; s < 23; s++)
 	{
 		sprintf_s(tmp, "./gameimage/%d.png", s);
-		loadimage(&gameimg[s], tmp, A, A);//¼ÓÔØÆ½ÃæÍ¼Æ¬
+		loadimage(&gameimg[s], tmp, A, A);//åŠ è½½å¹³é¢å›¾ç‰‡
 	}
 	for (int t = 0; t < 10; ++t) {
 		sprintf_s(tmp, "./numimage/%d.png", t);
-		loadimage(&numimg[t], tmp, 36, 60);//¼ÓÔØÊı×ÖÍ¼Æ¬
+		loadimage(&numimg[t], tmp, 36, 60);//åŠ è½½æ•°å­—å›¾ç‰‡
 	}
 	initgraph(graph, graph * 3 / 2);
 	setbkcolor(WHITE);
 	setcolor(WHITE);
-	int screenWidth = GetSystemMetrics(SM_CXSCREEN);  // »ñÈ¡ÆÁÄ»¿í¶È
-	int screenHeight = GetSystemMetrics(SM_CYSCREEN);  // »ñÈ¡ÆÁÄ»¸ß¶È
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);  // è·å–å±å¹•å®½åº¦
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);  // è·å–å±å¹•é«˜åº¦
 	int windowWidth = graph + 15;
 	int windowHeight = graph * 3 / 2;
-	int x = (screenWidth - windowWidth) / 2;  // ¼ÆËã´°¿Ú×óÉÏ½ÇµÄ x ×ø±ê
-	int y = (screenHeight - windowHeight) / 2;  // ¼ÆËã´°¿Ú×óÉÏ½ÇµÄ y ×ø±ê
+	int x = (screenWidth - windowWidth) / 2;  // è®¡ç®—çª—å£å·¦ä¸Šè§’çš„ x åæ ‡
+	int y = (screenHeight - windowHeight) / 2;  // è®¡ç®—çª—å£å·¦ä¸Šè§’çš„ y åæ ‡
 	HWND minesweep1 = GetHWnd();
-	MoveWindow(minesweep1, x, y, graph + 15, graph * 3 / 2, FALSE);  // ´´½¨´°¿Ú²¢Ö¸¶¨×óÉÏ½Ç×ø±ê
+	MoveWindow(minesweep1, x, y, graph + 15, graph * 3 / 2, FALSE);  // åˆ›å»ºçª—å£å¹¶æŒ‡å®šå·¦ä¸Šè§’åæ ‡
 	cleardevice();
 	game();
 	closegraph();
@@ -97,29 +97,29 @@ void gamedraw()
 	{
 		for (j = 0; j < num; j++)
 		{
-			if (map[i][j] == -1)//-------- µØÀ×  ÔËĞĞmapÖµ
+			if (map[i][j] == -1)//-------- åœ°é›·  è¿è¡Œmapå€¼
 			{
 				putimage(j * A, i * A, &gameimg[9]);
 			}
-			else if (map[i][j] >= 0 && map[i][j] <= 8)//--------Êı×Ö ÔËĞĞmapÖµ
+			else if (map[i][j] >= 0 && map[i][j] <= 8)//--------æ•°å­— è¿è¡Œmapå€¼
 			{
 				putimage(j * A, i * A, &gameimg[map[i][j]]);
 			}
-			else if (map[i][j] >= 19 && map[i][j] <= 28 || map[i][j] == 1000)//--------±»¸²¸ÇÊı×Ö ÔËĞĞmapÖµ
+			else if (map[i][j] >= 19 && map[i][j] <= 28 || map[i][j] == 1000)//--------è¢«è¦†ç›–æ•°å­— è¿è¡Œmapå€¼
 			{
 				putimage(j * A, i * A, &gameimg[10]);
 			}
-			else if (map[i][j] >= 39 && map[i][j] <= 48) {////--------±»²åÆìÊı×Ö ÔËĞĞmapÖµ
+			else if (map[i][j] >= 39 && map[i][j] <= 48) {////--------è¢«æ’æ——æ•°å­— è¿è¡Œmapå€¼
 				putimage(j * A, i * A, &gameimg[11]);
 			}
-			else if (map[i][j] >= 59 && map[i][j] <= 68) {////--------ÎÊºÅ¸²¸ÇÊı×Ö ÔËĞĞmapÖµ
+			else if (map[i][j] >= 59 && map[i][j] <= 68) {////--------é—®å·è¦†ç›–æ•°å­— è¿è¡Œmapå€¼
 				putimage(j * A, i * A, &gameimg[12]);
 			}
-			else if (map[i][j] == -9)//×Ô¼ºÇ×ÊÖµãÖĞµÄÀ×-------½áËãmapÖµ
+			else if (map[i][j] == -9)//è‡ªå·±äº²æ‰‹ç‚¹ä¸­çš„é›·-------ç»“ç®—mapå€¼
 			{
 				putimage(j * A, i * A, &gameimg[13]);
 			}
-			else if (map[i][j] == -5) {//´íÎó²åÆì-------½áËãmapÖµ
+			else if (map[i][j] == -5) {//é”™è¯¯æ’æ——-------ç»“ç®—mapå€¼
 				putimage(j * A, i * A, &gameimg[14]);
 			}
 			else if (map[i][j] >= 99 && map[i][j] <= 108 || map[i][j] == 1006) {
@@ -184,13 +184,13 @@ int mouseclick()
 		}
 		switch (msg.uMsg)
 		{
-		case WM_LBUTTONDOWN://×ó¼üµã»÷
+		case WM_LBUTTONDOWN://å·¦é”®ç‚¹å‡»
 			if (start == 0) {
 				if (timerrun == 0)
 				{
 					pthread_create(&GameClock, NULL, gameclock, NULL);
-					//µãÁËµÚÒ»ÏÂÖ®ºó¿ªÊ¼¼ÆÊ±£¬´´½¨Ïß³Ì
-					timerrun = 114514;//¿ªÆô¼ÆÊ±Ïß³Ì£¬½ö¶ÔµÚÒ»´Îµã»÷ÓĞÊµ¼Ê×÷ÓÃ
+					//ç‚¹äº†ç¬¬ä¸€ä¸‹ä¹‹åå¼€å§‹è®¡æ—¶ï¼Œåˆ›å»ºçº¿ç¨‹
+					timerrun = 114514;//å¼€å¯è®¡æ—¶çº¿ç¨‹ï¼Œä»…å¯¹ç¬¬ä¸€æ¬¡ç‚¹å‡»æœ‰å®é™…ä½œç”¨
 				}
 				getBoard(map, r, c);
 				start += 114514;
@@ -215,16 +215,16 @@ int mouseclick()
 			}
 			break;
 
-		case WM_RBUTTONDOWN://ÓÒ¼üµã»÷
-			if (map[r][c] >= 99 && map[r][c] <= 108 && start != 0)//Ç³À¶¿Õ¸ñ
+		case WM_RBUTTONDOWN://å³é”®ç‚¹å‡»
+			if (map[r][c] >= 99 && map[r][c] <= 108 && start != 0)//æµ…è“ç©ºæ ¼
 			{
-				map[r][c] -= 60;//±äÎªÀ¶É«Æì×Ó
+				map[r][c] -= 60;//å˜ä¸ºè“è‰²æ——å­
 			}
-			else if (map[r][c] >= 119 && map[r][c] <= 128)//Ç³À¶É«Æå×Ó
+			else if (map[r][c] >= 119 && map[r][c] <= 128)//æµ…è“è‰²æ£‹å­
 			{
 				map[r][c] -= 60;
 			}
-			else if (map[r][c] >= 139 && map[r][c] <= 148) //ÎÊºÅ
+			else if (map[r][c] >= 139 && map[r][c] <= 148) //é—®å·
 			{
 				map[r][c] -= 120;
 			}
@@ -239,10 +239,10 @@ int mouseclick()
 	return 0;
 }
 
-void judgement()//ÓÃÓÚÅĞ¶ÏÓÎÏ·ÊÇ·ñ½áÊø
+void judgement()//ç”¨äºåˆ¤æ–­æ¸¸æˆæ˜¯å¦ç»“æŸ
 {
 	gamedraw();
-	bool isfailure = false;//ÍêÉÆopenflagµÄÅĞ¶ÏËùÓÃµÄ¶îÍâ²ÎÊı
+	bool isfailure = false;//å®Œå–„openflagçš„åˆ¤æ–­æ‰€ç”¨çš„é¢å¤–å‚æ•°
 	for (int i = 0; i < num; ++i) {
 		for (int j = 0; j < num; ++j) {
 			if (map[i][j] == -1) {
@@ -251,27 +251,27 @@ void judgement()//ÓÃÓÚÅĞ¶ÏÓÎÏ·ÊÇ·ñ½áÊø
 			}
 		}
 	}
-	if (mouseclick() == -1 || isfailure)//·µ»ØÖµ-1£¬ËµÃ÷²ÈÀ×£¬µ¼ÏòÓÎÏ·Ê§°Ü
+	if (mouseclick() == -1 || isfailure)//è¿”å›å€¼-1ï¼Œè¯´æ˜è¸©é›·ï¼Œå¯¼å‘æ¸¸æˆå¤±è´¥
 	{
 		if (timerrun != 0)
 		{
 			timerrun = 0;
-		}//Í£Ö¹¼ÆÊ±Ïß³Ì, ×¢Òâ£º¸Ã²½Öè¾ßÓĞ×î¸ßÓÅÏÈ¼¶£¬ÈÎºÎºó¼Ó´úÂë²»µÃÖÃÓÚÆäÇ°
-		failure();//ĞÂ¼ÓµÄĞ§¹û
+		}//åœæ­¢è®¡æ—¶çº¿ç¨‹, æ³¨æ„ï¼šè¯¥æ­¥éª¤å…·æœ‰æœ€é«˜ä¼˜å…ˆçº§ï¼Œä»»ä½•ååŠ ä»£ç ä¸å¾—ç½®äºå…¶å‰
+		failure();//æ–°åŠ çš„æ•ˆæœ
 	}
 	else if (minenum() == MINE)
 	{
 		if (timerrun != 0)
 		{
 			timerrun = 0;
-		}//Í£Ö¹¼ÆÊ±Ïß³Ì, ×¢Òâ£º¸Ã²½Öè¾ßÓĞ×î¸ßÓÅÏÈ¼¶£¬ÈÎºÎºó¼Ó´úÂë²»µÃÖÃÓÚÆäÇ°
+		}//åœæ­¢è®¡æ—¶çº¿ç¨‹, æ³¨æ„ï¼šè¯¥æ­¥éª¤å…·æœ‰æœ€é«˜ä¼˜å…ˆçº§ï¼Œä»»ä½•ååŠ ä»£ç ä¸å¾—ç½®äºå…¶å‰
 		gamedraw();
 		winner();
 		ranking();
 		int isok = MessageBox(GetHWnd(), "BRIILANT! You won the game!\nOne time more?", "Notice", MB_OKCANCEL);
 		if (isok == IDOK)
 		{
-			game();//ÕâÀïĞ´µÄÊÇgameinit£¬ºóĞø»áĞÂ½¨Ò»¸ögame()º¯ÊıÓÃÓÚÖ´ĞĞÓÎÏ·µÄÖ÷ÌâÄÚÈİ--23.12.01
+			game();//è¿™é‡Œå†™çš„æ˜¯gameinitï¼Œåç»­ä¼šæ–°å»ºä¸€ä¸ªgame()å‡½æ•°ç”¨äºæ‰§è¡Œæ¸¸æˆçš„ä¸»é¢˜å†…å®¹--23.12.01
 		}
 		else {
 			startgame();
@@ -368,7 +368,7 @@ void failure() {
 	int isok = MessageBox(GetHWnd(), "Oops! You clicked on the boom!\nWould you want to play again?", "Notice", MB_OKCANCEL);
 	if (isok == IDOK)
 	{
-		game();//ÕâÀïĞ´µÄÊÇgameinit£¬ºóĞø»áĞÂ½¨Ò»¸ögame()º¯ÊıÓÃÓÚÖ´ĞĞÓÎÏ·µÄÖ÷ÌâÄÚÈİ--23.12.01
+		game();//è¿™é‡Œå†™çš„æ˜¯gameinitï¼Œåç»­ä¼šæ–°å»ºä¸€ä¸ªgame()å‡½æ•°ç”¨äºæ‰§è¡Œæ¸¸æˆçš„ä¸»é¢˜å†…å®¹--23.12.01
 	}
 	else
 	{
@@ -444,11 +444,11 @@ void boomstart()
 				if (i >= 0 && i < num && j >= 0 && j < num)
 				{
 					if (sqrt((i - r) * (i - r) + (j - c) * (j - c)) <= x + 0.5 && sqrt((i - r) * (i - r) + (j - c) * (j - c)) >= x - 0.5 && map[i][j] == 0)
-					{//ÔÚÔ²ÖÜÉÏ
+					{//åœ¨åœ†å‘¨ä¸Š
 						map[i][j] += 100;
 					}
 					else if (sqrt((i - r) * (i - r) + (j - c) * (j - c)) <= x + 0.5 && map[i][j] == 100)
-					{//ÔÚÔ²ÀïÃæ
+					{//åœ¨åœ†é‡Œé¢
 						map[i][j] -= 80;
 					}
 				}
@@ -456,7 +456,7 @@ void boomstart()
 		}
 		gamedraw();
 		delay(0.1);
-		x++;//¼Ó°ë¾¶
+		x++;//åŠ åŠå¾„
 	}
 	flushmessage();
 }
@@ -512,7 +512,7 @@ void boomend(int r, int c)
 	}
 }
 
-void counter()//¼ÆÊıÆ÷
+void counter()//è®¡æ•°å™¨
 {
 	char tmp[20] = { 0 };
 	for (int r = 0; r < num; r++)
@@ -532,34 +532,34 @@ void counter()//¼ÆÊıÆ÷
 	//Sleep(1000);
 }
 
-void* gameclock(void* (arg)) {//¼ÆÊ±Æ÷Ïß³Ì²ÎÊıº¯Êı
+void* gameclock(void* (arg)) {//è®¡æ—¶å™¨çº¿ç¨‹å‚æ•°å‡½æ•°
 	curt = 0;
 	while (timerrun) {
 		Sleep(1000);
 		++curt;
-		//printf("You played the game for %d seconds\n",curt);//Ïß³Ì²âÊÔ´úÂë
-		int a = 0;//°ÙÎ»
-		int b = 0;//Ê®Î»
-		int c = 0;//¸öÎ»     //curt³¬¹ı999Ö±½Ó¹Ò×Å :)
+		//printf("You played the game for %d seconds\n",curt);//çº¿ç¨‹æµ‹è¯•ä»£ç 
+		int a = 0;//ç™¾ä½
+		int b = 0;//åä½
+		int c = 0;//ä¸ªä½     //curtè¶…è¿‡999ç›´æ¥æŒ‚ç€ :)
 		if (curt <= 999) {
 			a = curt / 100;
 			b = (curt - a * 100) / 10;
 			c = curt - a * 100 - b * 10;
-			//ÌáÈ¡¸÷Î»Êı
+			//æå–å„ä½æ•°
 			putimage(graph / 4 * 3 - 54, graph / 12 * 13, &numimg[a]);
 			putimage(graph / 4 * 3 - 18, graph / 12 * 13, &numimg[b]);
 			putimage(graph / 4 * 3 + 18, graph / 12 * 13, &numimg[c]);
-			//ÏÔÊ¾
+			//æ˜¾ç¤º
 		}
 	}
-	pthread_exit(NULL);//Ïß³Ì¾Íµ½´Ë½áÊøÀ²
+	pthread_exit(NULL);//çº¿ç¨‹å°±åˆ°æ­¤ç»“æŸå•¦
 	return NULL;
 }
 
 void ranking()
 {
 	int i;
-	char str[7];                     //Òª²åÈëµÄÊı¾İ
+	char str[7];                     //è¦æ’å…¥çš„æ•°æ®
 	int min = curt / 60;
 	int sec = curt % 60;
 	if (min < 10 && min>0) {
@@ -590,13 +590,13 @@ void ranking()
 	}
 	if (choice == PRO)
 	{
-		fp = fopen("./ranking/ranknormal.txt", "r");//ÕâÀïĞŞ¸ÄÁËÎÄ¼şÃû£¡£¡£¡
+		fp = fopen("./ranking/ranknormal.txt", "r");//è¿™é‡Œä¿®æ”¹äº†æ–‡ä»¶åï¼ï¼ï¼
 	}
 	if (choice == MASTER)
 	{
 		fp = fopen("./ranking/rankmaster.txt", "r");
 	}
-	//¶Á·½Ê½´ò¿ªÎÄ¼ş¡£
+	//è¯»æ–¹å¼æ‰“å¼€æ–‡ä»¶ã€‚
 	for (i = 0; i < 10; i++)
 	{
 		fgets(buf[i], 32, fp);
@@ -610,11 +610,11 @@ void ranking()
 		if (j == 0 && strcmp(buf[j], str) >= 0)
 			x = -1;
 	}
-	for (i = 9; i >= x + 1; i--)                    //É¾³ıµÚ2ĞĞ
+	for (i = 9; i >= x + 1; i--)                    //åˆ é™¤ç¬¬2è¡Œ
 	{
 		strcpy(buf[i + 1], buf[i]);
 	}
-	strcpy(buf[x + 1], str);                    //²åÈëµ½µÚx+1ĞĞ¡£
+	strcpy(buf[x + 1], str);                    //æ’å…¥åˆ°ç¬¬x+1è¡Œã€‚
 	if (choice == NOOB)
 	{
 		fp = fopen("./ranking/ranknoob.txt", "w");
@@ -624,13 +624,13 @@ void ranking()
 		fp = fopen("./ranking/ranknormal.txt", "w");
 	}
 	if (choice == MASTER)
-		fp = fopen("./ranking/rankmaster.txt", "w");               //Ğ´·½Ê½´ò¿ªÎÄ¼ş¡£
+		fp = fopen("./ranking/rankmaster.txt", "w");               //å†™æ–¹å¼æ‰“å¼€æ–‡ä»¶ã€‚
 	for (i = 0; i < 10; i++)
 	{
 		fputs(buf[i], fp);
 	}
 
-	fclose(fp);//¹Ø±ÕÎÄ¼ş¡£
+	fclose(fp);//å…³é—­æ–‡ä»¶ã€‚
 	fflush(fp);
 	fp = NULL;
 	if (choice == NOOB)
@@ -638,7 +638,7 @@ void ranking()
 	if (choice == PRO)
 		fp = fopen("./ranking/ranknormal.txt", "r");
 	if (choice == MASTER)
-		fp = fopen("./ranking/rankmaster.txt", "r");            //Ğ´·½Ê½´ò¿ªÎÄ¼ş¡£
+		fp = fopen("./ranking/rankmaster.txt", "r");            //å†™æ–¹å¼æ‰“å¼€æ–‡ä»¶ã€‚
 	for (i = 0; i < 10; i++)
 	{
 		fgets(buf[i], 32, fp);
@@ -651,7 +651,7 @@ void showlist()
 {
 	ExMessage msg{};
 
-	TCHAR back[50] = "·µ»ØÖ÷½çÃæ";
+	TCHAR back[50] = "è¿”å›ä¸»ç•Œé¢";
 	char listnoob [11][32] = {0};
 	char listnormal[11][32] = {0};
 	char listmaster[11][32] = {0};
@@ -661,14 +661,14 @@ void showlist()
 
 	initgraph(600, 800, NULL);
 	setbkcolor(WHITE);
-	int screenWidth = GetSystemMetrics(SM_CXSCREEN);  // »ñÈ¡ÆÁÄ»¿í¶È
-	int screenHeight = GetSystemMetrics(SM_CYSCREEN);  // »ñÈ¡ÆÁÄ»¸ß¶È
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);  // è·å–å±å¹•å®½åº¦
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);  // è·å–å±å¹•é«˜åº¦
 	int windowWidth = 600;
 	int windowHeight = 800;
-	int x = (screenWidth - windowWidth) / 2;  // ¼ÆËã´°¿Ú×óÉÏ½ÇµÄ x ×ø±ê
-	int y = (screenHeight - windowHeight) / 2;  // ¼ÆËã´°¿Ú×óÉÏ½ÇµÄ y ×ø±ê
+	int x = (screenWidth - windowWidth) / 2;  // è®¡ç®—çª—å£å·¦ä¸Šè§’çš„ x åæ ‡
+	int y = (screenHeight - windowHeight) / 2;  // è®¡ç®—çª—å£å·¦ä¸Šè§’çš„ y åæ ‡
 	HWND minesweep1 = GetHWnd();
-	MoveWindow(minesweep1, x, y, 600, 800, FALSE);  // ´´½¨´°¿Ú²¢Ö¸¶¨×óÉÏ½Ç×ø±ê
+	MoveWindow(minesweep1, x, y, 600, 800, FALSE);  // åˆ›å»ºçª—å£å¹¶æŒ‡å®šå·¦ä¸Šè§’åæ ‡
 	cleardevice();
 
 	flistnoob = fopen("./ranking/ranknoob.txt", "r");
@@ -690,18 +690,18 @@ void showlist()
 		fgets(listmaster[i], 32, flistmaster);
 	}
 	settextcolor(BLACK);
-	settextstyle(20, 10, "¿¬Ìå");
-	outtextxy(20, 5, "¼òµ¥ÄÑ¶È:");
+	settextstyle(20, 10, "æ¥·ä½“");
+	outtextxy(20, 5, "ç®€å•éš¾åº¦:");
 	for (int i = 0; i < 11; i++)
 	{
 		outtextxy(20, 25*i+30, (TCHAR*)listnoob[i]);
 	}
-	outtextxy(180, 5, "Õı³£ÄÑ¶È:");
+	outtextxy(180, 5, "æ­£å¸¸éš¾åº¦:");
 	for (int i = 0; i < 11; i++)
 	{
 		outtextxy(180, 25 * i + 30, (TCHAR*)listnormal[i]);
 	}
-	outtextxy(350, 5, "À§ÄÑÄÑ¶È:");
+	outtextxy(350, 5, "å›°éš¾éš¾åº¦:");
 	for (int i = 0; i < 11; i++)
 	{
 		outtextxy(350, 25 * i + 30, (TCHAR*)listmaster[i]);
@@ -713,8 +713,7 @@ void showlist()
 		{
 			if (msg.x >= 200 && msg.x <= 350 && msg.y > 650 && msg.y < 725 && msg.message == WM_LBUTTONDOWN)
 			{
-				//·µ»Ø
-				startgame();
+				//è¿”å›
 				startgame();
 				selectingmode();
 				play();
